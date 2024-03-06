@@ -27,11 +27,5 @@ public class AttendanceController {
         String message = attendanceService.endWork(request.getEmployeeId());
         return ResponseEntity.ok(message);
     }
-//
-//    @GetMapping("/monthlyWorkTime")
-//    public ResponseEntity<?> getMonthlyWorkTime(@RequestParam Long employeeId, @RequestParam String yearMonth) {
-//        YearMonth ym = YearMonth.parse(yearMonth);
-//        WorkTimeDto workTime = attendanceService.getMonthlyWorkTime(employeeId, ym);
-//        return ResponseEntity.ok(workTime);
-//    }
+
 }
