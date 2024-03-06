@@ -3,14 +3,12 @@ package com.commute.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-public class TeamResponse {
-
+public class TeamRegistrationRequest {
     private String name;
-    private String manager;
-    private Long memberCount;
-
 }

@@ -1,8 +1,8 @@
 package com.commute.controller;
 
 import com.commute.domain.Team;
-import com.commute.dto.TeamRequest;
-import com.commute.dto.TeamResponse;
+import com.commute.dto.TeamRegistrationRequest;
+import com.commute.dto.TeamInfoResponse;
 import com.commute.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +18,15 @@ public class TeamController {
     private final TeamService teamService;
 
     @PostMapping("/team")
-    public ResponseEntity<Team> saveTeam(@RequestBody TeamRequest request) {
+    public ResponseEntity<Team> saveTeam(@RequestBody TeamRegistrationRequest request) {
         Team team = teamService.saveTeam(request);
 
         return ResponseEntity.ok(team);
     }
 
     @GetMapping
-    public ResponseEntity<List<TeamResponse>> getAllTeams() {
-        List<TeamResponse> teamsInfo = teamService.getAllTeamsInfo();
+    public ResponseEntity<List<TeamInfoResponse>> getAllTeams() {
+        List<TeamInfoResponse> teamsInfo = teamService.getAllTeamsInfo();
 
         return ResponseEntity.ok(teamsInfo);
     }

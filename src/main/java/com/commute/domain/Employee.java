@@ -1,5 +1,6 @@
 package com.commute.domain;
 
+import com.commute.domain.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,8 @@ public class Employee {
 
     private String name;
 
-    private boolean isManager;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     private LocalDate entryDate;
 

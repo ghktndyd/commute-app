@@ -2,8 +2,8 @@ package com.commute.service;
 
 import com.commute.domain.Employee;
 import com.commute.domain.Team;
-import com.commute.dto.EmployeeRequest;
-import com.commute.dto.EmployeeResponse;
+import com.commute.dto.EmployeeRegistrationRequest;
+import com.commute.dto.EmployeeInfoResponse;
 import com.commute.repository.EmployeeRepository;
 import com.commute.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,13 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final TeamRepository teamRepository;
 
-    public Employee registerEmployee(EmployeeRequest request) {
+    public Employee registerEmployee(EmployeeRegistrationRequest request) {
         Team team = teamRepository.findById(request.getTeamId())
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팀 아이디입니다."));
 
         Employee employee = Employee.builder()
                 .name(request.getName())
-                .isManager(request.isManager())
+                .role(request.getRole())
                 .entryDate(request.getEntryDate())
                 .birthDay(request.getBirthDay())
                 .team(team)
@@ -33,7 +33,7 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public List<EmployeeResponse> getAllEmployeesInfo() {
+    public List<EmployeeInfoResponse> getAllEmployeesInfo() {
         return employeeRepository.findAllEmployeeInfo();
     }
 }
