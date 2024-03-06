@@ -27,5 +27,4 @@ public class AttendanceController {
         String message = attendanceService.endWork(request.getEmployeeId());
         return ResponseEntity.ok(message);
     }
-
 }

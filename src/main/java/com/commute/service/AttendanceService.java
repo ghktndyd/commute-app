@@ -46,10 +46,15 @@ public class AttendanceService {
 
     @Transactional
     public String endWork(Long employeeId) {
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 id입니다"));
+        Employee employee = findEmployeeById(employeeId);
+        Attendance attendance = checkAttendance(employee);
+        attendance.recordEndWork(NOW);
+        attendanceRepository.save(attendance);
 
-        LocalDate today = LocalDate.now();
+        return "퇴근 처리 되었습니다.";
+    }
+
+    private Attendance checkAttendance(Employee employee) {
         Attendance attendance = attendanceRepository.findByEmployeeAndStartWorkBetween(employee, START_OF_DAY, END_OF_DAY)
                 .orElseThrow(() -> new IllegalStateException("출근 처리 되지 않았습니다."));
 
@@ -57,10 +62,7 @@ public class AttendanceService {
             throw new IllegalStateException("이미 퇴근 처리 되었습니다.");
         }
 
-        attendance.setEndWork(LocalDateTime.now());
-        attendanceRepository.save(attendance);
-
-        return "퇴근 처리 되었습니다.";
+        return attendance;
     }
 
 }
