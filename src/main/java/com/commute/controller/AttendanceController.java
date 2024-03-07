@@ -1,13 +1,11 @@
 package com.commute.controller;
 
 import com.commute.dto.AttendanceRequest;
+import com.commute.dto.WorkTimeDetails;
 import com.commute.service.AttendanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/attendance")
 @RequiredArgsConstructor
@@ -26,5 +24,12 @@ public class AttendanceController {
     public ResponseEntity<String> endWork(@RequestBody AttendanceRequest request) {
         String message = attendanceService.endWork(request.getEmployeeId());
         return ResponseEntity.ok(message);
+    }
+
+    @GetMapping("/monthly-work-time/{employeeId}")
+    public ResponseEntity<WorkTimeDetails> getMonthlyWorkTime(@PathVariable Long employeeId,
+                                                              @RequestParam String yearMonth) {
+        WorkTimeDetails workTimeDetails = attendanceService.getMonthlyWorkTime(employeeId, yearMonth);
+        return ResponseEntity.ok(workTimeDetails);
     }
 }

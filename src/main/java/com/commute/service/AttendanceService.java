@@ -2,14 +2,17 @@ package com.commute.service;
 
 import com.commute.domain.Attendance;
 import com.commute.domain.Employee;
+import com.commute.dto.WorkDayDetail;
+import com.commute.dto.WorkTimeDetails;
 import com.commute.repository.AttendanceRepository;
 import com.commute.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -63,6 +66,40 @@ public class AttendanceService {
         }
 
         return attendance;
+    }
+
+    @Transactional(readOnly = true)
+    public WorkTimeDetails getMonthlyWorkTime(Long employeeId, String yearMonthStr) {
+        YearMonth yearMonth = YearMonth.parse(yearMonthStr);
+        LocalDateTime start = getStartOfMonth(yearMonth);
+        LocalDateTime end = getEndOfMonth(yearMonth);
+
+        List<Attendance> attendances = attendanceRepository.findAttendancesForEmployeeInMonth(employeeId, start, end);
+
+        List<WorkDayDetail> workDayDetails = calculateWorkDayDetails(attendances);
+        long sum = calculateTotalWorkMinutes(workDayDetails);
+
+        return new WorkTimeDetails(workDayDetails, sum);
+    }
+
+    private LocalDateTime getStartOfMonth(YearMonth yearMonth) {
+        return yearMonth.atDay(1).atStartOfDay();
+    }
+
+    private LocalDateTime getEndOfMonth(YearMonth yearMonth) {
+        return yearMonth.atEndOfMonth().atTime(LocalTime.MAX);
+    }
+
+    private List<WorkDayDetail> calculateWorkDayDetails(List<Attendance> attendances) {
+        return attendances.stream()
+                .filter(attendance -> attendance.getEndWork() != null)
+                .map(attendance -> new WorkDayDetail(attendance.getStartWork().toLocalDate(),
+                        Duration.between(attendance.getStartWork(), attendance.getEndWork()).toMinutes()))
+                .collect(Collectors.toList());
+    }
+
+    private long calculateTotalWorkMinutes(List<WorkDayDetail> workDayDetails) {
+        return workDayDetails.stream().mapToLong(WorkDayDetail::getWorkingMinutes).sum();
     }
 
 }
