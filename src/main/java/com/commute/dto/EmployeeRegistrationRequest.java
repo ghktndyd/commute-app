@@ -24,4 +24,6 @@ public class EmployeeRegistrationRequest {
 
     private Long teamId;
     private Role role;
+
+    private int remainingAnnualLeave;
 }

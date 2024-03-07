@@ -4,10 +4,12 @@ import com.commute.domain.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,7 +29,15 @@ public class Employee {
 
     private LocalDate birthDay;
 
+    private int remainingAnnualLeave;
+
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
+
+    public int subtractOneAnnualLeave() {
+        this.remainingAnnualLeave = this.getRemainingAnnualLeave() - 1;
+        return remainingAnnualLeave;
+    }
+
 }

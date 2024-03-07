@@ -12,7 +12,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query("SELECT new com.commute.dto.EmployeeInfoResponse(e.name, t.name, " +
             "CASE WHEN e.role = 'MANAGER' THEN 'MANAGER' ELSE 'MEMBER' END, " +
-            "e.birthDay, e.entryDate) " +
+            "e.birthDay, e.entryDate, e.remainingAnnualLeave) " +
             "FROM Employee e LEFT JOIN e.team t")
     List<EmployeeInfoResponse> findAllEmployeeInfo();
 

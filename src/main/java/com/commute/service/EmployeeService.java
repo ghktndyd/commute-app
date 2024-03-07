@@ -28,6 +28,7 @@ public class EmployeeService {
                 .entryDate(request.getEntryDate())
                 .birthDay(request.getBirthDay())
                 .team(team)
+                .remainingAnnualLeave(request.getRemainingAnnualLeave())
                 .build();
 
         return employeeRepository.save(employee);

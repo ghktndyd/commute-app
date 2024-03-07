@@ -15,4 +15,5 @@ public class EmployeeInfoResponse {
     private String role;
     private LocalDate birthDay;
     private LocalDate entryDate;
+    private int remainingAnnualLeave;
 }
