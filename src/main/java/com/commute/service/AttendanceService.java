@@ -35,18 +35,6 @@ public class AttendanceService {
         return "출근 처리 되었습니다.";
     }
 
-    private Employee findEmployeeById(Long employeeId) {
-        return employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 id입니다"));
-    }
-
-    private void checkAlreadyAttendance(Employee employee) {
-        boolean alreadyStarted = attendanceRepository.existsByEmployeeAndStartWorkBetween(employee, START_OF_DAY, END_OF_DAY);
-        if (alreadyStarted) {
-            throw new IllegalStateException("이미 출근 처리 되었습니다.");
-        }
-    }
-
     @Transactional
     public String endWork(Long employeeId) {
         Employee employee = findEmployeeById(employeeId);
@@ -55,17 +43,6 @@ public class AttendanceService {
         attendanceRepository.save(attendance);
 
         return "퇴근 처리 되었습니다.";
-    }
-
-    private Attendance checkAttendance(Employee employee) {
-        Attendance attendance = attendanceRepository.findByEmployeeAndStartWorkBetween(employee, START_OF_DAY, END_OF_DAY)
-                .orElseThrow(() -> new IllegalStateException("출근 처리 되지 않았습니다."));
-
-        if (attendance.getEndWork() != null) {
-            throw new IllegalStateException("이미 퇴근 처리 되었습니다.");
-        }
-
-        return attendance;
     }
 
     @Transactional(readOnly = true)
@@ -80,6 +57,29 @@ public class AttendanceService {
         long sum = calculateTotalWorkMinutes(workDayDetails);
 
         return new WorkTimeDetails(workDayDetails, sum);
+    }
+
+    private Employee findEmployeeById(Long employeeId) {
+        return employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 id입니다"));
+    }
+
+    private void checkAlreadyAttendance(Employee employee) {
+        boolean alreadyStarted = attendanceRepository.existsByEmployeeAndStartWorkBetween(employee, START_OF_DAY, END_OF_DAY);
+        if (alreadyStarted) {
+            throw new IllegalStateException("이미 출근 처리 되었습니다.");
+        }
+    }
+
+    private Attendance checkAttendance(Employee employee) {
+        Attendance attendance = attendanceRepository.findByEmployeeAndStartWorkBetween(employee, START_OF_DAY, END_OF_DAY)
+                .orElseThrow(() -> new IllegalStateException("출근 처리 되지 않았습니다."));
+
+        if (attendance.getEndWork() != null) {
+            throw new IllegalStateException("이미 퇴근 처리 되었습니다.");
+        }
+
+        return attendance;
     }
 
     private LocalDateTime getStartOfMonth(YearMonth yearMonth) {

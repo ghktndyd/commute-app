@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@Table(
+        uniqueConstraints = @UniqueConstraint(name = "uni_attendance_1", columnNames = {"employeeId"})
+)
 public class Attendance {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

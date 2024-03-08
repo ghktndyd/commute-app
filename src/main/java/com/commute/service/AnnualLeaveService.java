@@ -1,7 +1,6 @@
 package com.commute.service;
 
 import com.commute.domain.Employee;
-import com.commute.domain.LeavePolicy;
 import com.commute.dto.AnnualLeaveRequest;
 import com.commute.repository.AnnualLeaveRepository;
 import com.commute.repository.EmployeeRepository;

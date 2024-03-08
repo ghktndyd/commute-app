@@ -18,10 +18,8 @@ public class TeamController {
     private final TeamService teamService;
 
     @PostMapping("/team")
-    public ResponseEntity<Team> saveTeam(@RequestBody TeamRegistrationRequest request) {
+    public void saveTeam(@RequestBody TeamRegistrationRequest request) {
         Team team = teamService.saveTeam(request);
-
-        return ResponseEntity.ok(team);
     }
 
     @GetMapping
